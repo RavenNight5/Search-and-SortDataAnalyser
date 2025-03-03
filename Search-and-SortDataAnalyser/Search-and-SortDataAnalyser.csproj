@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data_2048\Class1.cs" />
-    <Compile Include="Data_256\Class2.cs" />
+    <Compile Include="BubbleSort.cs" />
+    <Compile Include="ConfigureArrays.cs" />
+    <Compile Include="Initialise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
