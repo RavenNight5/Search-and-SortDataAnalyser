@@ -8,8 +8,8 @@ namespace Search_and_SortDataAnalyser
 {
     internal class Initialise
     {
-        List<string> contents_256 = new List<string> { Program.S_1_256_Contents, Program.S_2_256_Contents, Program.S_3_256_Contents };  /////////////////then iterate thru list for adding
-        List<string> contents_2048 = new List<string> { Program.S_1_2048_Contents, Program.S_2_2048_Contents, Program.S_3_2048_Contents };
+        private List<string> contents_256 = new List<string> { Program.S_1_256_Contents, Program.S_2_256_Contents, Program.S_3_256_Contents };  /////////////////then iterate thru list for adding
+        private List<string> contents_2048 = new List<string> { Program.S_1_2048_Contents, Program.S_2_2048_Contents, Program.S_3_2048_Contents };
 
         public Initialise()
         {
