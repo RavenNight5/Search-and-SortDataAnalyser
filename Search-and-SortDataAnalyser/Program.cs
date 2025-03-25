@@ -51,8 +51,8 @@
  *  > Search results including value locations or nearest available values.
  * 
  * Implemented Algorithms:
- *  > Sorting: Bubble Sort, Quick Sort, Merge Sort
- *  > Searching: Linear Search, Binary Search
+ *  > Sorting: Bubble Sort, Insertion Sort, Quick Sort, Merge Sort
+ *  > Searching: Sequential (Linear) Search, Binary Search, Interpolation Search
  * 
 
 -
@@ -67,9 +67,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Search_and_SortDataAnalyser.Searching_Algorithms;
 
 namespace Search_and_SortDataAnalyser
 {
@@ -131,6 +129,84 @@ namespace Search_and_SortDataAnalyser
             Console.ReadKey();  // When Initialise and ConfigureArrays is complete, wait for an input so the console does not close immediately
         }
         
+        public static void SEARCH_RESULTS(int key, bool outOfBounds, List<int> KeyPositions, int newHigherKey, int newLowerKey, int[] ClosestKeys, List<List<int>> ClosestKeysPositions)
+        {
+            Console.WriteLine("\n---");
+
+            if (KeyPositions.Count >= 1 && outOfBounds == false)  // Key was found
+            {
+                if (KeyPositions.Count == 1) { Console.WriteLine($"The value {key} appears once at index position {KeyPositions[0]} of the selected array."); }
+                else if (KeyPositions.Count > 1)
+                {
+                    List<int> KeyPositionsNew = new List<int>();
+
+                    for (int i = 0; i < KeyPositions.Count - 1; i++)  // Assign all but the last element to the newly created list
+                    {
+                        KeyPositionsNew.Add(KeyPositions[i]);
+                    }
+
+                    Console.WriteLine($"The value {key} appears {KeyPositions.Count} times at index positions: {string.Join(", ", KeyPositionsNew)} and {KeyPositions[KeyPositions.Count - 1]} of the selected array.");
+                }
+            }
+            else  // Closest values to the search key were found instead
+            {
+                Console.WriteLine($"! Key not found !\n  The value {key} is not present in the selected array.\n");
+
+                if (ClosestKeys[0] != -1 && ClosestKeys[1] == -1)  // Search key was smaller than the smalest value
+                {
+                    List<int> KeyPositionsNew = new List<int>();
+
+                    for (int i = 0; i < KeyPositions.Count - 1; i++) { KeyPositionsNew.Add(KeyPositions[i]); }
+
+                    string concat = "";
+
+                    if (KeyPositions.Count == 1) { concat += $"\n{ClosestKeys[0]} is the lowest possible value in the array, which appears once at index position: {KeyPositions[0].ToString()} of the selected array."; }
+                    else { concat += $"\n{ClosestKeys[0]} is the lowest possible value in the array, which appears {KeyPositions.Count} times at index positions: {string.Join(", ", KeyPositionsNew)} and {KeyPositions[KeyPositions.Count - 1]} of the selected array."; }
+
+                    Console.WriteLine(concat);
+                }
+                else if (ClosestKeys[0] == -1 && ClosestKeys[1] != -1)  // Search key was larger than the largest value
+                {
+                    List<int> KeyPositionsNew = new List<int>();
+
+                    for (int i = 0; i < KeyPositions.Count - 1; i++) { KeyPositionsNew.Add(KeyPositions[i]); }
+
+                    string concat = "";
+
+                    if (KeyPositions.Count == 1) { concat += $"\n{ClosestKeys[1]} is the highest possible value in the array, which appears once at index position: {KeyPositions[0].ToString()} of the selected array."; }
+                    else { concat += $"\n{ClosestKeys[1]} is the highest possible value in the array, which appears {KeyPositions.Count} times at index positions: {string.Join(", ", KeyPositionsNew)} and {KeyPositions[KeyPositions.Count - 1]} of the selected array."; }
+
+                    Console.WriteLine(concat);
+                }
+                else  // Key is within the bounds of the array but is not found
+                {
+                    List<int> KeyLowPositionsNew = new List<int>();
+                    List<int> KeyHighPositionsNew = new List<int>();
+
+                    for (int i = 0; i < ClosestKeysPositions[0].Count - 1; i++) { KeyLowPositionsNew.Add(ClosestKeysPositions[0][i]); }
+                    for (int i = 0; i < ClosestKeysPositions[1].Count - 1; i++) { KeyHighPositionsNew.Add(ClosestKeysPositions[1][i]); }
+
+                    string concat = "";
+
+                    if (ClosestKeysPositions[0].Count == 1) { concat += $"\n{ClosestKeys[0]} is the next lowest value which appears once at index position: {ClosestKeysPositions[0][0].ToString()} of the selected array."; }
+                    else { concat += $"\n{ClosestKeys[0]} is the next lowest value which appears {ClosestKeysPositions[0].Count} times at index positions: {string.Join(", ", KeyLowPositionsNew)} and {ClosestKeysPositions[0][ClosestKeysPositions[0].Count - 1]} of the selected array."; }
+
+                    if (ClosestKeysPositions[1].Count == 1) { concat += $"\n{ClosestKeys[1]} is the next highest value which appears once at index position: {ClosestKeysPositions[1][0].ToString()} of the selected array."; }
+                    else { concat += $"\n{ClosestKeys[1]} is the next highest value which appears {ClosestKeysPositions[1].Count} times at index positions: {string.Join(", ", KeyHighPositionsNew)} and {ClosestKeysPositions[1][ClosestKeysPositions[1].Count - 1]} of the selected array."; }
+
+                    Console.WriteLine(concat);
+                }
+               
+            }
+
+            Console.WriteLine("---\n");
+
+            Console.WriteLine($"Searched with Sequential Search in {Sequential_Search.count} steps.");
+            Console.WriteLine($"\nSearched with Binary Search in xxx steps.");
+            Console.WriteLine($"\nSearched with Interpolation Search in xxx steps.");
+
+            Console.WriteLine("\n---\n");
+        }
 
         public static void CLEAR_CONSOLE()
         {

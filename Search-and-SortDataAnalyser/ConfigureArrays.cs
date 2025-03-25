@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Search_and_SortDataAnalyser.Searching_Algorithms;
 using Search_and_SortDataAnalyser.Sorting_Algorithms;
 
 namespace Search_and_SortDataAnalyser
@@ -100,10 +102,10 @@ namespace Search_and_SortDataAnalyser
 
             selectedFile = Program.AllFiles[dataPointsSelect - 1][dataFileSelect - 1];  // - 1 to get the index from the selected option
 
-            SelectedFile();
+            SelectedArray();
         }
 
-        private void SelectedFile()
+        private void SelectedArray()
         {
             string canMerge = "\n > Merge with another file [3]";
             int maxNum = 4;
@@ -154,13 +156,16 @@ namespace Search_and_SortDataAnalyser
             }
         }
 
-        //
-        private void SearchArrayOptions()
+
+        public void SearchArrayOptions(bool invalidInput = false)
         {
             Program.CLEAR_CONSOLE();
 
+            Console.WriteLine("Input the search key [press Enter to confirm]: ");
+            if (invalidInput) { Console.WriteLine("Please enter a positive integer number..."); }
+
+            SearchArray();
         }
-        
         private void SortArrayOptions()
         {
             Program.CLEAR_CONSOLE();
@@ -206,7 +211,6 @@ namespace Search_and_SortDataAnalyser
 
             SortArray();
         }
-
         private void MergeArrayOptions()
         {
             Program.CLEAR_CONSOLE();
@@ -344,10 +348,67 @@ namespace Search_and_SortDataAnalyser
             Debug.Assert(option != -1, errMessage1);
             //
 
-            SelectedFile();
+            SelectedArray();
         }
-        //
 
+
+        private void SearchArray()
+        {
+            int searchKey = UserInput(0, -1);  // Use -1 to tell the input method the max number is infinite
+
+            if (searchKey == -1)  // Search key input was invalid (negative number, string etc.)
+            {
+                SearchArrayOptions(true);
+            }
+            else { Search(); }
+
+            //// Use multiple different methods of searching to compare effectiveness (see classes in View > Solution Explorer)
+            void Search()
+            {
+                // Sequential Search
+                Sequential_Search sequential_Search = new Sequential_Search();
+
+                sequential_Search.SequentialSearchArray(selectedFile, searchKey);
+
+                //Others...
+
+            }
+
+            string canMerge = "\n > Merge with another file [2]";
+            int maxNum = 3;
+
+            if (currentFileName.Contains("&"))
+            {
+                canMerge = "";
+                maxNum = 2;
+            }
+
+            Console.WriteLine($"\n > Search again [1]\n{canMerge}\n > Choose different file [{maxNum}]\n");
+
+            void Options()
+            {
+                int option = UserInput(1, maxNum);
+
+                if (option == -1)
+                {
+                    Options();
+                }
+                else if (option == 1)
+                {
+                    SearchArrayOptions();
+                }
+                else if (option == 2 && canMerge != "")
+                {
+                    MergeArrayOptions();
+                }
+                else if (option == maxNum)
+                {
+                    SelectArray();
+                }
+            }
+            
+            Options();
+        }
         private void SortArray()
         {
             Program.CLEAR_CONSOLE();
@@ -406,40 +467,124 @@ namespace Search_and_SortDataAnalyser
             Program.CLEAR_CONSOLE();
             //
 
-
-            ////Sort array with all implemented algorithms (see classes in View > Solution Explorer)
+            ////Sort array with all implemented algorithms to compare effectiveness (see classes in View > Solution Explorer)
             Console.WriteLine("Sorting...\n");
 
-            string concatenatedResult = "";
+            string results = "";
+
+            void ConcatenateResults(string sortName, int count_A, int count_D)
+            {
+                if (sortingOrder == "ascending") { results += $"Sorted with {sortName} Sort in {count_A} steps.\n---\n"; }
+                else if (sortingOrder == "descending") { results += $"Sorted with {sortName} Sort in {count_D} steps.\n---\n"; }
+                else { results += $"Sorted with {sortName} in {count_A} steps for ascending order and {count_D} steps for descending order.\n---\n"; }
+            }
 
             //Bubble sort
-            Bubble_Sort bubbleSort = new Bubble_Sort();
-
-            bubbleSort.ClearValues();  // Resets the counters
-
             int[] bubbleSortedArray_A = new int[selectedFile.Length];
             int[] bubbleSortedArray_D = new int[selectedFile.Length];
 
-            for (int j = 0; j < selectedFile.Length - 1; j++)  // Assign each data point to the cloned arrays
+            void bubble()
             {
-                bubbleSortedArray_A[j] = selectedFile[j];
-                bubbleSortedArray_D[j] = selectedFile[j];
+                Bubble_Sort bubble_Sort = new Bubble_Sort();
+
+                int j = 0;
+
+                foreach (int item in selectedFile)  // Assign each data point to the cloned arrays
+                {
+                    bubbleSortedArray_A[j] = item;
+                    bubbleSortedArray_D[j] = item;
+
+                    j++;
+                }
+
+                bubbleSortedArray_A = bubble_Sort.BubbleSortArray(bubbleSortedArray_A, "A");
+                bubbleSortedArray_D = bubble_Sort.BubbleSortArray(bubbleSortedArray_D, "D");
+
+                ConcatenateResults("Bubble", bubble_Sort.count_A, bubble_Sort.count_D);
             }
 
-            bubbleSortedArray_A = bubbleSort.BubbleSortArray(bubbleSortedArray_A, "A");
-            bubbleSortedArray_D = bubbleSort.BubbleSortArray(bubbleSortedArray_D, "D");
+            bubble();
 
-            if (sortingOrder == "ascending" || sortingOrder == "descending") { concatenatedResult += $"\n---\nSorted with Bubble Sort in {bubbleSort.lastSortCount} iterations.\n---\n"; }
-            else { concatenatedResult += $"\n---\nSorted with Bubble Sort in {bubbleSort.lastSortCount} iterations for ascending order and {bubbleSort.lastSortCountD} iterations for descending order.\n---\n"; }
+            //Insertion sort
+            void insertion()
+            {
+                Insertion_Sort insertion_Sort = new Insertion_Sort();
 
-            //
+                int[] insertionSortedArray_A = new int[selectedFile.Length];
+                int[] insertionSortedArray_D = new int[selectedFile.Length];
 
-            Console.WriteLine(concatenatedResult);
+                int j = 0;
 
+                foreach (int item in selectedFile)
+                {
+                    insertionSortedArray_A[j] = item;
+                    insertionSortedArray_D[j] = item;
+
+                    j++;
+                }
+
+                insertionSortedArray_A = insertion_Sort.InsertionSortArray(insertionSortedArray_A, "A");
+                insertionSortedArray_D = insertion_Sort.InsertionSortArray(insertionSortedArray_D, "D");
+
+                ConcatenateResults("Insertion", insertion_Sort.count_A, insertion_Sort.count_D);
+            }
+
+            insertion();
+
+            //Merge sort
+            void merge()
+            {
+                Merge_Sort merge_Sort = new Merge_Sort();
+
+                int[] mergeSortedArray_A = new int[selectedFile.Length];
+                int[] mergeSortedArray_D = new int[selectedFile.Length];
+
+                int j = 0;
+
+                foreach (int item in selectedFile)
+                {
+                    mergeSortedArray_A[j] = item;
+                    mergeSortedArray_D[j] = item;
+
+                    j++;
+                }
+
+                mergeSortedArray_A = merge_Sort.MergeSortArray(mergeSortedArray_A, "A");
+                mergeSortedArray_D = merge_Sort.MergeSortArray(mergeSortedArray_D, "D");
+
+                ConcatenateResults("Merge", merge_Sort.count_A, merge_Sort.count_D);
+            }
+
+            merge();
+
+            //Quick sort
+            void quick()
+            {
+                Quick_Sort quick_Sort = new Quick_Sort();
+
+                int[] quickSortedArray_A = new int[selectedFile.Length];
+                int[] quickSortedArray_D = new int[selectedFile.Length];
+
+                int j = 0;
+
+                foreach (int item in selectedFile)
+                {
+                    quickSortedArray_A[j] = item;
+                    quickSortedArray_D[j] = item;
+
+                    j++;
+                }
+
+                quickSortedArray_A = quick_Sort.QuickSortArray(quickSortedArray_A, 0, quickSortedArray_A.Length, "A");  //0 is the index for the start pointer, length of the array (-1) is the index for the end pointer
+                quickSortedArray_D = quick_Sort.QuickSortArray(quickSortedArray_D, 0, quickSortedArray_D.Length, "D");
+
+                ConcatenateResults("Quick", quick_Sort.count_A, quick_Sort.count_D);
+            }
+
+            quick();
+
+            Console.WriteLine("---\n" + results + "\n\nSorted!");
             ////
-            //////cont...
-
-            Console.WriteLine("\nSorted!");
 
             int val = -1;
 
@@ -507,8 +652,8 @@ namespace Search_and_SortDataAnalyser
                         {
                             Program.CLEAR_CONSOLE();
 
-                            Console.WriteLine("Sorted!");
-                            Console.WriteLine(concatenatedResult);
+                            Console.WriteLine("---\n" + results + "\n\nSorted!");
+
                             Console.WriteLine($"\n > Show every {val.ToString()}th value [1]\n > Show fully sorted array{pluralArray} [2]\n");
 
                             SortArray_Select2();
@@ -600,37 +745,58 @@ namespace Search_and_SortDataAnalyser
 
         private int UserInput(int selectionMin, int selectionMax)
         {
-            string keyInfo = Console.ReadKey().Key.ToString();
-
-            if (integerInputs.Contains(keyInfo))
+            if (selectionMax != -1)  // Single key option
             {
-                if (int.TryParse(keyInfo.TrimStart('D'), out int n))  // Input is an integer ("" means string, '' means character)
+                string keyInfo = Console.ReadKey().Key.ToString();
+
+                if (integerInputs.Contains(keyInfo))
                 {
-                    int key = int.Parse(keyInfo.TrimStart('D'));
-
-                    if (key >= selectionMin && key <= selectionMax)
+                    if (int.TryParse(keyInfo.TrimStart('D'), out int n))  // Input is an integer ("" means string, '' means character)
                     {
-                        return key;
-                    }
-                    else
-                    {
-                        ClearCurrentConsoleLine();
+                        int key = int.Parse(keyInfo.TrimStart('D'));
 
-                        Console.WriteLine("Please enter a valid option...");
+                        if (key >= selectionMin && key <= selectionMax)
+                        {
+                            return key;
+                        }
+                        else
+                        {
+                            ClearCurrentConsoleLine();
 
-                        return -1;
+                            Console.WriteLine("Please enter a valid option...");
+
+                            return -1;
+                        }
                     }
+                    else { ClearCurrentConsoleLine(); Console.WriteLine("Please enter a valid integer option..."); return -1; }
                 }
-                else { ClearCurrentConsoleLine(); Console.WriteLine("Please enter a valid integer option..."); return -1; }
-            }
-            else
-            {
-                ClearCurrentConsoleLine();
+                else
+                {
+                    ClearCurrentConsoleLine();
 
-                Console.WriteLine("Please enter a valid option...");
+                    Console.WriteLine("Please enter a valid option...");
+
+                    return -1;
+                }
+            }
+            else  // Read whole user input
+            {
+                string userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out int _))  // Try to change the string input to an integer, if successful the input is numerical
+                {
+                    int numberInput = int.Parse(userInput);
+
+                    if (numberInput >= 0)
+                    {
+                        return numberInput;
+                    }
+                    else { return -1; }
+                }
 
                 return -1;
             }
+            
         }
 
         public static void ClearCurrentConsoleLine()

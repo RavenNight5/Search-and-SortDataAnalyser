@@ -8,7 +8,7 @@ namespace Search_and_SortDataAnalyser
 {
     internal class Initialise
     {
-        private List<string> contents_256 = new List<string> { Program.S_1_256_Contents, Program.S_2_256_Contents, Program.S_3_256_Contents };  /////////////////then iterate thru list for adding
+        private List<string> contents_256 = new List<string> { Program.S_1_256_Contents, Program.S_2_256_Contents, Program.S_3_256_Contents };
         private List<string> contents_2048 = new List<string> { Program.S_1_2048_Contents, Program.S_2_2048_Contents, Program.S_3_2048_Contents };
 
         public Initialise()
@@ -45,12 +45,17 @@ namespace Search_and_SortDataAnalyser
             }
 
             string[] newDataArray = currrentContents.Split('\n').ToArray();
-            int[] newDataArrayInt = new int[newDataArray.Length];
+
+            int[] newDataArrayInt = new int[newDataArray.Length - 1];  // -1 as an empty string is created as an element in the newDataArray (from the newline at the end of the files)
 
             for (int i = 0; i < newDataArrayInt.Length; i++)
             {
-                newDataArray[i] = newDataArray[i].Trim().Replace("\n", "");  // Remove the newline characters and any whitespace
-                newDataArrayInt[i] = int.Parse(newDataArray[i]);  // Convert the string number to an integer (so it can be sorted easily)
+                newDataArray[i] = newDataArray[i].Trim().Replace("\n", string.Empty);  // Remove the newline characters and any whitespace
+                
+                if (int.TryParse(newDataArray[i], out int _))  // Checks if the element can be converted to an integer number
+                {
+                    newDataArrayInt[i] = int.Parse(newDataArray[i]);  // Convert the string number to an integer (so it can be sorted easily)
+                }
             }
 
             return newDataArrayInt;

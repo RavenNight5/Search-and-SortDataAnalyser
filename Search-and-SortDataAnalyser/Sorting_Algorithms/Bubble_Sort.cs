@@ -8,32 +8,34 @@ namespace Search_and_SortDataAnalyser.Sorting_Algorithms
 {
     internal class Bubble_Sort
     {
-        public int lastSortCount = 0;
-        public int lastSortCountD = 0;
+        public int count_A = 0;
+        public int count_D = 0;
 
-        public int[] arrayClone;
+        private int[] arrayClone;
 
-        public void ClearValues()
+        public Bubble_Sort() { ClearValues(); }
+
+        private void ClearValues()
         {
-            lastSortCount = 0;
-            lastSortCountD = 0;
+            count_A = 0;
+            count_D = 0;
         }
 
         public int[] BubbleSortArray(int[] array, string order)
         {
             arrayClone = array;
+            
+            //Console.WriteLine(order + "\n   lscA: " + count_A + "   lscD: " + count_D);
 
-            Console.WriteLine(order + "   lsc: " + lastSortCount + "   lscD: " + lastSortCountD);
-
-            for (int i = 0; i < arrayClone.Length - 1; i++)  // For each element in the array
+            for (int i = 0; i < arrayClone.Length; i++)  // For each element in the array
             {
-                for (int j = 0; j < (arrayClone.Length - 1) - i; j++)  // When j is < array length - current element index
+                for (int j = 0; j < (arrayClone.Length) - i; j++)  // When j is < array length - current element index
                 {
-                    if (order == "A")
+                    if (order == "A" && !(j + 1 > arrayClone.Length - 1))
                     {
                         if (arrayClone[j + 1] < arrayClone[j])  // If the element in front of the element at index j in the array is SMALLER (then swap)
                         {
-                            lastSortCount++;  // Iterate the counter
+                            count_A++;  // Iterate the counter
 
                             int buffer = arrayClone[j];
 
@@ -41,11 +43,11 @@ namespace Search_and_SortDataAnalyser.Sorting_Algorithms
                             arrayClone[j + 1] = buffer;
                         }
                     }
-                    else if (order == "D")
+                    else if (order == "D" && !(j + 1 > arrayClone.Length - 1))
                     {
                         if (arrayClone[j + 1] > arrayClone[j])  // If the element in front of the element at index j in the array is LARGER (then swap)
                         {
-                            lastSortCountD++;  // Iterate the counter
+                            count_D++;  // Iterate the counter
 
                             int buffer = arrayClone[j];
 
@@ -55,8 +57,6 @@ namespace Search_and_SortDataAnalyser.Sorting_Algorithms
                     }
                 }
             }
-
-            Console.WriteLine(order + "   lsc: " + lastSortCount + "   lscD: " + lastSortCountD);
 
             return arrayClone;
         }
