@@ -8,31 +8,31 @@ namespace Search_and_SortDataAnalyser.Sorting_Algorithms
 {
     internal class Quick_Sort
     {
-        public int count_A = 1;
-        public int count_D = 1;
+        public int Count_A = 1;
+        public int Count_D = 1;
 
-        private string currentOrder = "A";
+        private string _currentOrder = "A";
 
-        private int[] arrayClone;
+        private int[] _arrayClone;
 
         public Quick_Sort() { ClearValues(); }
 
         private void ClearValues()
         {
-            count_A = 1;
-            count_D = 1;
+            Count_A = 1;
+            Count_D = 1;
         }
 
         public int[] QuickSortArray(int[] array, int start, int stop, string order)
         {
-            arrayClone = array;
-            currentOrder = order;
+            _arrayClone = array;
+            _currentOrder = order;
 
             QuickSort(array, 0, array.Length - 1);
 
-            //Console.WriteLine(string.Join(", ", arrayClone));
+            //Console.WriteLine(string.Join(", ", _arrayClone));
 
-            return arrayClone;
+            return _arrayClone;
         }
 
         public void QuickSort(int[] array, int low, int high)
@@ -55,22 +55,22 @@ namespace Search_and_SortDataAnalyser.Sorting_Algorithms
 
             for (int j = low; j < high; j++)
             {
-                if (currentOrder == "A")
+                if (_currentOrder == "A")
                 {
                     if (array[j] <= pivot)  // If the current value is smaller or equal to the pivot
                     {
                         i++;
-                        count_A++;
+                        Count_A++;
 
                         SwapElements(array, i, j);
                     }
                 }
-                else if (currentOrder == "D")
+                else if (_currentOrder == "D")
                 {
                     if (array[j] >= pivot)  // If the current value is greater or equal to the pivot
                     {
                         i++;
-                        count_D++;
+                        Count_D++;
 
                         SwapElements(array, i, j);
                     }

@@ -9,71 +9,72 @@ namespace Search_and_SortDataAnalyser.Searching_Algorithms
 {
     internal class Sequential_Search
     {
-        private List<int> KeyPositions;
-        private int[] ClosestKeys = new int[] { -1, -1 };
-        private List<List<int>> ClosestKeysPositions;
+        public static int Count = 1;
 
-        public static int count = 1;
+        private List<int> _keyPositions;
+        private int[] _closestKeys = new int[] { -1, -1 };
+        private List<List<int>> _closestKeysPositions;
 
-        private int initialKey = 0;
+        private int _initialKey = 0;
 
-        private int newKey;
-        private int newHigherKey;
-        private int newLowerKey;
+        private int _newKey;
+        private int _newHigherKey;
+        private int _newLowerKey;
 
         private bool _outOfBounds = false;
         private bool _findingNearestVals = false;
         private bool _foundLowerVal = false;
-        private bool foundLargerKey = false;
+        private bool _foundLargerKey = false;
 
-        private int countCloseValues = 0;
+        private int _countCloseValues = 0;
 
-        private int smallestVal = 1;
-        private int largestVal = 2;
+        private int _smallestVal = 1;
+        private int _largestVal = 2;
 
         public Sequential_Search() { ClearValues(); }
 
+        public void SequentialSearchArray(int[] array, int key)
+        {
+            _initialKey = key;
+
+            _newKey = key;
+            _newHigherKey = key;
+            _newLowerKey = key;
+
+            _smallestVal = array[0];  // Set a pivot for _smallestVal in the array
+            _largestVal = array[1];  // Set a pivot for _largestVal in the array
+
+            SequentialSearch(array, key);
+
+            //Console.WriteLine(_smallestVal + "_s l_" + _largestVal);
+            //Console.WriteLine(string.Join("  ", _closestKeys));
+            //Console.WriteLine("Closest index for 0");
+            //Console.WriteLine(string.Join("     ", _closestKeysPositions[0]));
+            //Console.WriteLine("Closest index for 1");
+            //Console.WriteLine(string.Join("     ", _closestKeysPositions[1]));
+
+            // Writes the found positions to the console through program class (so the output message can be easily modified)
+            Program.SEARCH_RESULTS(array, key, _outOfBounds, _keyPositions, _newHigherKey, _newLowerKey, _closestKeys, _closestKeysPositions);
+        }
+
         private void ClearValues()
         {
-            KeyPositions = new List<int>();
-            ClosestKeys = new int[] { -2, -2 };
-            ClosestKeysPositions = new List<List<int>>() { new List<int>(), new List<int>() };
+            _keyPositions = new List<int>();
+            _closestKeys = new int[] { -2, -2 };
+            _closestKeysPositions = new List<List<int>>() { new List<int>(), new List<int>() };
 
-            count = 1;
+            Count = 1;
 
             _outOfBounds = false;
             _findingNearestVals = false;
             _foundLowerVal = false;
 
-            countCloseValues = 0;  // Max value of two as it will be the index for my created lists and arrays - used when key is in the bounds of the array but not found
-        }
-
-        public void SequentialSearchArray(int[] array, int key)
-        {
-            initialKey = key;
-
-            newKey = key;
-            newHigherKey = key;
-            newLowerKey = key;
-
-            smallestVal = array[0];  // Set a pivot for smallestVal in the array
-            largestVal = array[1];  // Set a pivot for largestVal in the array
-
-            SequentialSearch(array, key);
-
-            //Console.WriteLine(smallestVal + "_s l_" + largestVal);
-            //Console.WriteLine(string.Join("  ", ClosestKeys));
-            //Console.WriteLine("Closest index for 0");
-            //Console.WriteLine(string.Join("     ", ClosestKeysPositions[0]));
-            //Console.WriteLine("Closest index for 1");
-            //Console.WriteLine(string.Join("     ", ClosestKeysPositions[1]));
-
-            Program.SEARCH_RESULTS(key, _outOfBounds, KeyPositions, newHigherKey, newLowerKey, ClosestKeys, ClosestKeysPositions);  // Writes the found positions to the console through program (so the output message can be easily modified)
+            _countCloseValues = 0;  // Used when key is in the bounds of the array, but not found - stops recursion causing stack overflow
         }
 
         private void SequentialSearch(int[] array, int key, bool recursion = false, bool indexOfRecursionVals = false)  // Key is the value being searched for in the array
         {
-            newKey = key;
+            _newKey = key;
 
             int n = array.Length;
             int i = 0;
@@ -82,73 +83,73 @@ namespace Search_and_SortDataAnalyser.Searching_Algorithms
             {
                 if (!recursion && !indexOfRecursionVals)
                 {
-                    if (array[i] == key ) { KeyPositions.Add(i); }  // If the current element matches the search key, add its position to the list
+                    if (array[i] == key ) { _keyPositions.Add(i); }  // If the current element matches the search key, add its position to the list
 
                     // Determine the smallest and largest values of the array (later used for finding the key's closest value)
-                    if (array[i] < smallestVal) { smallestVal = array[i]; }
-                    else if (array[i] > largestVal) { largestVal = array[i]; }
+                    if (array[i] < _smallestVal) { _smallestVal = array[i]; }
+                    else if (array[i] > _largestVal) { _largestVal = array[i]; }
 
                     i++;
-                    count++;
+                    Count++;
                 }
                 else if (recursion && !indexOfRecursionVals)  // For finding the next highest value to the key
                 {
-                    if (array[i] == newKey)
+                    if (array[i] == _newKey)
                     {
-                        if (foundLargerKey == false)
+                        if (_foundLargerKey == false)
                         {
-                            foundLargerKey = true;
+                            _foundLargerKey = true;
 
-                            ClosestKeys[1] = newKey;
-                            newHigherKey = newKey;
+                            _closestKeys[1] = _newKey;
+                            _newHigherKey = _newKey;
 
-                            newKey = initialKey;  // Change the newKey back to the initial one so the search can decrement from that point (rather than going through the whole array) - then the next lowest value can be found
+                            // Change the _newKey back to the initial one so the search can decrement from that point (rather than going through the whole array),
+                            // then the next lowest value can be found
+                            _newKey = _initialKey;
                         }
                     }
 
                     i++;
-                    count++;
+                    Count++;
                 }
                 else
                 {
-                    if (array[i] == newKey)
+                    if (array[i] == _newKey)
                     {
                         if (_findingNearestVals == true)
                         {
-                            if (foundLargerKey && ClosestKeys[0] == -2)  // For finding the next lowest value to the key
+                            if (_foundLargerKey && _closestKeys[0] == -2)  // For finding the next lowest value to the key
                             {
-                                newLowerKey = newKey;
-                                ClosestKeys[0] = newKey;
+                                _newLowerKey = _newKey;
+                                _closestKeys[0] = _newKey;
                             }
                             else  // For finding the indexes of the next higher and lower values
                             {
-                                if (array[i] == ClosestKeys[0])
+                                if (array[i] == _closestKeys[0])
                                 {
-                                    if (!ClosestKeysPositions[0].Contains(i))
+                                    if (!_closestKeysPositions[0].Contains(i))
                                     {
-                                        ClosestKeysPositions[0].Add(i);
+                                        _closestKeysPositions[0].Add(i);
                                     }
                                 }
-                                else if (array[i] == ClosestKeys[1])
+                                else if (array[i] == _closestKeys[1])
                                 { 
-                                    if (!ClosestKeysPositions[1].Contains(i))
+                                    if (!_closestKeysPositions[1].Contains(i))
                                     {
-                                        ClosestKeysPositions[1].Add(i);
+                                        _closestKeysPositions[1].Add(i);
                                     }
                                 }
                             }
                         }
-                        else  // For assigning their index positions to ClosestKeysPositions
+                        else  // For assigning their index positions to _closestKeysPositions
                         {
-                            if (foundLargerKey == true)
+                            if (_foundLargerKey == true)
                             {
-                                ClosestKeys[0] = newKey;
-                                //ClosestKeysPositions[0].Add(i);
+                                _closestKeys[0] = _newKey;
                             }
                             else
                             {
-                                ClosestKeys[1] = newKey;
-                                //ClosestKeysPositions[1].Add(i);
+                                _closestKeys[1] = _newKey;
                             }
                         }
                     }
@@ -157,67 +158,68 @@ namespace Search_and_SortDataAnalyser.Searching_Algorithms
                 }
             }
 
-            if (KeyPositions.Count < 1 && (ClosestKeys[0] == -2 && ClosestKeys[1] == -2) && _findingNearestVals == false)  // Key not found: search for the Key's closest value instead
+            if (_keyPositions.Count < 1 && (_closestKeys[0] == -2 && _closestKeys[1] == -2) && _findingNearestVals == false)  // Key not found: search for the key's closest value instead
             {
-                if (newKey < largestVal && newKey > smallestVal)  // Search key is within the bounds of the array (between the lowest and highest values)
+                if (_newKey < _largestVal && _newKey > _smallestVal)  // Search key is within the bounds of the array (between the lowest and highest values)
                 {
-                    if (newKey < largestVal && !foundLargerKey)
+                    if (_newKey < _largestVal && !_foundLargerKey)
                     {
-                        SequentialSearch(array, newKey = newKey + 1, true);
+                        SequentialSearch(array, _newKey = _newKey + 1, true);
                     }
-                    if (newKey > smallestVal)
+                    if (_newKey > _smallestVal)
                     {
-                        //Console.WriteLine(newKey - 1);
-                        SequentialSearch(array, newKey = newKey - 1, true);
+                        //Console.WriteLine(_newKey - 1);
+                        SequentialSearch(array, _newKey = _newKey - 1, true);
                     }
                 }
-                else if (newKey < smallestVal)  // Search key is smaller than the smallest value in the array
+                else if (_newKey < _smallestVal)  // Search key is smaller than the smallest value in the array
                 {
                     _outOfBounds = true;
 
-                    newLowerKey = -1;
+                    _newLowerKey = -1;
 
-                    ClosestKeys[0] = smallestVal;
-                    ClosestKeys[1] = -1;
+                    _closestKeys[0] = _smallestVal;
+                    _closestKeys[1] = -1;
 
-                    SequentialSearch(array, smallestVal, false);
+                    SequentialSearch(array, _smallestVal, false);
                 }
-                else if (newKey > largestVal)  // Search key is larger than the largest value in the array
+                else if (_newKey > _largestVal)  // Search key is larger than the largest value in the array
                 {
                     _outOfBounds = true;
 
-                    newHigherKey = -1;
+                    _newHigherKey = -1;
 
-                    ClosestKeys[0] = -1;
-                    ClosestKeys[1] = largestVal;
+                    _closestKeys[0] = -1;
+                    _closestKeys[1] = _largestVal;
 
-                    SequentialSearch(array, largestVal, false);
+                    SequentialSearch(array, _largestVal, false);
                 }
             }
-            else if (KeyPositions.Count < 1 && ((ClosestKeys[0] == -2 || ClosestKeys[1] == -2) || countCloseValues <= 3))  // Search for how many times the closest higher and lower values appear
+            // Search for how many times the closest higher and lower values appear
+            else if (_keyPositions.Count < 1 && ((_closestKeys[0] == -2 || _closestKeys[1] == -2) || _countCloseValues <= 3))
             {
-                countCloseValues++;
+                _countCloseValues++;
 
                 _findingNearestVals = true;
 
-                //Console.WriteLine(string.Join(", ", ClosestKeys));
-                //Console.WriteLine("count: " + countCloseValues);
+                //Console.WriteLine(string.Join(", ", _closestKeys));
+                //Console.WriteLine("Count: " + _countCloseValues);
 
-                if (ClosestKeys[0] == -2 && _foundLowerVal == false)
+                if (_closestKeys[0] == -2 && _foundLowerVal == false)
                 {
-                    SequentialSearch(array, newKey = newKey - 1, true, true);
+                    SequentialSearch(array, _newKey = _newKey - 1, true, true);
                 }
                 else if (_foundLowerVal == false)
                 {
                     _foundLowerVal = true;
 
-                    SequentialSearch(array, newLowerKey, true, true);
+                    SequentialSearch(array, _newLowerKey, true, true);
                 }
 
                 // Search for the index positions of the new nearer high key (when already completed for the smaller key)
-                if (countCloseValues == 4)
+                if (_countCloseValues == 4)
                 {
-                    SequentialSearch(array, newHigherKey, true, true);
+                    SequentialSearch(array, _newHigherKey, true, true);
                 }
 
             }

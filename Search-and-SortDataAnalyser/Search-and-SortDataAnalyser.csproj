@@ -47,6 +47,7 @@
     <Compile Include="Initialise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Searching_Algorithms\Binary_Search.cs" />
     <Compile Include="Searching_Algorithms\Sequential_Search.cs" />
     <Compile Include="Sorting_Algorithms\Bubble_Sort.cs" />
     <Compile Include="Sorting_Algorithms\Insertion_Sort.cs" />
