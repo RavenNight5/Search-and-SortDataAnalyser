@@ -562,7 +562,7 @@ namespace Search_and_SortDataAnalyser
                 insertionSortedArray_A = insertion_Sort.InsertionSortArray(insertionSortedArray_A, "A");
                 insertionSortedArray_D = insertion_Sort.InsertionSortArray(insertionSortedArray_D, "D");
 
-                ConcatenateResults("Insertion", insertion_Sort.count_A, insertion_Sort.count_D);
+                ConcatenateResults("Insertion", insertion_Sort.Count_A, insertion_Sort.Count_D);
             }
 
             insertion();
@@ -588,7 +588,7 @@ namespace Search_and_SortDataAnalyser
                 mergeSortedArray_A = merge_Sort.MergeSortArray(mergeSortedArray_A, "A");
                 mergeSortedArray_D = merge_Sort.MergeSortArray(mergeSortedArray_D, "D");
 
-                ConcatenateResults("Merge", merge_Sort.count_A, merge_Sort.count_D);
+                ConcatenateResults("Merge", merge_Sort.Count_A, merge_Sort.Count_D);
             }
 
             merge();
@@ -614,7 +614,7 @@ namespace Search_and_SortDataAnalyser
                 quickSortedArray_A = quick_Sort.QuickSortArray(quickSortedArray_A, 0, quickSortedArray_A.Length, "A");  //0 is the index for the start pointer
                 quickSortedArray_D = quick_Sort.QuickSortArray(quickSortedArray_D, 0, quickSortedArray_D.Length, "D");
 
-                ConcatenateResults("Quick", quick_Sort.count_A, quick_Sort.count_D);
+                ConcatenateResults("Quick", quick_Sort.Count_A, quick_Sort.Count_D);
             }
 
             quick();
