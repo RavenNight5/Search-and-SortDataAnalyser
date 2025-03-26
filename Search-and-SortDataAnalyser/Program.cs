@@ -240,12 +240,12 @@ namespace Search_and_SortDataAnalyser
             // Based on their steps (the count variable) do a comparative evaluation
             if (Binary_Search.Count < Sequential_Search.Count)
             {
-                Console.WriteLine($"In this case, Binary Search would be the most effective at searching the algorithm, as it takes the least amount of steps.\n" +
-                    $"(However, the algorithm must be sorted before it can be searched.)");
+                Console.WriteLine($"In this case, Binary Search would be the most effective search algorithm as it takes the least amount of steps.\n" +
+                    $"(However, the algorithm must be sorted before it can be searched!)");
             }
             else  // For some reason sequential takes less steps than binary, which would likely never happen, I've implemented this it just incase.
             {
-                Console.WriteLine($"In this case, Sequential Search would be the most effective at searching the algorithm, as it takes the least amount of steps.");
+                Console.WriteLine($"In this case, Sequential Search would be the most effective search algorithm as it takes the least amount of steps.");
             }
         }
 
