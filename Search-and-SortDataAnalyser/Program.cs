@@ -1,6 +1,6 @@
 ﻿/* Program Name: Stock Exchange Volume Analyzer
  * 
- * Author: Isla McLaughlin
+ * Author: RavenNight5
  * Date: [26/03/2025]
  * Description: This program uses classes to provide a console-based application that reads, sorts, and searches stock exchange volume data from multiple text files.
  *              Users are able to analyze stock trading activity by the implementation of different searching and sorting algorithms; each showing their efficiency
