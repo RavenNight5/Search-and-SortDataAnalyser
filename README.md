@@ -1,4 +1,4 @@
-# Search-and-SortDataAnalyser
+# Search and Sort Data Analyser
 
 A console-based program that responds to user input. 
 The program is able to manipulate data from a set of files, including functions such as:
