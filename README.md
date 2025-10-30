@@ -6,4 +6,10 @@ The program is able to manipulate data from a set of files, including functions 
 - Sort (Bubble, Insertion, Merge & Quick)
 - Merge one or more files and continue with the above functions
 
+<br>
+
+> See Program.cs for a full commented overview
+
+<br>
+
 Project was an assignment for a module called **Algorithms and Complexity**.
